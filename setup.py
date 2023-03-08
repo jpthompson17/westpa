@@ -121,6 +121,7 @@ INSTALL_REQUIRES = [
     "tqdm",
     "pandas",
     "tables",
+    "scikit-learn>=1.2.1,<2.0.0",
 ]
 
 EXTRAS_REQUIRE = {

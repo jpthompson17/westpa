@@ -14,11 +14,12 @@ log = logging.getLogger(__name__)
 
 def _group_walkers_identity(we_driver, ibin, **kwargs):
     log.debug('using we_driver._group_walkers_identity')
-    bin_set = we_driver.next_iter_binning[ibin]
-    list_bins = [set()]
-    for i in bin_set:
-        list_bins[0].add(i)
-    return list_bins
+    return [set(we_driver.next_iter_binning[ibin])]
+    # bin_set = we_driver.next_iter_binning[ibin]
+    # list_bins = [set()]
+    # for i in bin_set:
+    #     list_bins[0].add(i)
+    # return list_bins
 
 
 class ConsistencyError(RuntimeError):
@@ -328,48 +329,45 @@ class WEDriver:
             yield state
 
     def assign(self, segments, initializing=False):
-        '''Assign segments to initial and final bins, and update the (internal) lists of used and available
-        initial states. If ``initializing`` is True, then the "final" bin assignments will
-        be identical to the initial bin assignments, a condition required for seeding a new iteration from
-        pre-existing segments.'''
+        """Assign segments to initial and final bins, and update the (internal)
+        lists of used and available initial states.
 
-        # collect initial and final coordinates into one place
-        all_pcoords = np.empty((2, len(segments), self.system.pcoord_ndim), dtype=self.system.pcoord_dtype)
+        Parameters
+        ----------
+        segments : Sequence[Segment]
+            The segments to assign.
+        initializing : bool, default False
+            If True, the "final" bin assignments will be identical to the
+            initial bin assignments, a condition required for seeding a new
+            iteration from pre-existing segments.
 
-        for iseg, segment in enumerate(segments):
-            all_pcoords[0, iseg] = segment.pcoord[0, :]
-            all_pcoords[1, iseg] = segment.pcoord[-1, :]
+        Returns
+        -------
+        int
+            The number of new initial states that must be generated.
 
-        # assign based on initial and final progress coordinates
-        initial_assignments = self.bin_mapper.assign(all_pcoords[0, :, :])
+        """
+        initial_pcoords = np.array([segment.pcoord[0] for segment in segments])
+        initial_assignments = self.bin_mapper.assign(initial_pcoords)
+
         if initializing:
             final_assignments = initial_assignments
         else:
-            final_assignments = self.bin_mapper.assign(all_pcoords[1, :, :])
+            final_pcoords = np.array([segment.pcoord[-1] for segment in segments])
+            final_assignments = self.bin_mapper.assign(final_pcoords)
 
-        initial_binning = self.initial_binning
-        final_binning = self.final_binning
-        flux_matrix = self.flux_matrix
-        transition_matrix = self.transition_matrix
-        for (segment, iidx, fidx) in zip(segments, initial_assignments, final_assignments):
-            initial_binning[iidx].add(segment)
-            final_binning[fidx].add(segment)
-            flux_matrix[iidx, fidx] += segment.weight
-            transition_matrix[iidx, fidx] += 1
-
-        n_recycled_total = self.n_recycled_segs
-        n_new_states = n_recycled_total - len(self.avail_initial_states)
+        for (segment, i, j) in zip(segments, initial_assignments, final_assignments):
+            self.initial_binning[i].add(segment)
+            self.final_binning[j].add(segment)
+            self.flux_matrix[i, j] += segment.weight
+            self.transition_matrix[i, j] += 1
 
         log.debug(
-            '{} walkers scheduled for recycling, {} initial states available'.format(
-                n_recycled_total, len(self.avail_initial_states)
-            )
+            f'{self.n_recycled_segs} walkers scheduled for recycling, '
+            f'{len(self.avail_initial_states)} initial states available'
         )
 
-        if n_new_states > 0:
-            return n_new_states
-        else:
-            return 0
+        return max(self.n_recycled_segs - len(self.avail_initial_states), 0)
 
     def _recycle_walkers(self):
         '''Recycle walkers'''
