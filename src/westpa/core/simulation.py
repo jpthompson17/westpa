@@ -391,7 +391,7 @@ class Simulation:
         self._bin_target_counts = target_counts
 
     def update_source_and_sinks(self, source, sinks):
-        """Update the source and sink.
+        """Update the source and sinks.
 
         Parameters
         ----------
