@@ -12,8 +12,8 @@ class GromacsPropagator(SubprocessPropagator):
     ----------
     topology_file : str
     md_parameters : Mapping[str, Any]
-    ref_structure_file : str, optional
-    ref_b_structure_file : str, optional
+    ref_coordinate_file : str, optional
+    ref_b_coordinate_file : str, optional
     index_file : str, optional
     final_state_filename : str, optional
     **kwargs
