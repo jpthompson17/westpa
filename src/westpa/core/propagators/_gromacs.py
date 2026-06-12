@@ -8,6 +8,12 @@ from .subprocess import SubprocessPropagator
 class GromacsPropagator(SubprocessPropagator):
     """Molecular dynamics propagator built on the `GROMACS <https://www.gromacs.org/>`_ package.
 
+    To create a :class:`~westpa.State` object compatible with this propagator,
+    provide the absolute path to a GROMACS coordinate file, for example:
+
+    >>> import westpa
+    >>> state = westpa.State(file='/path/to/conf.gro')
+
     Parameters
     ----------
     topology_file : str
