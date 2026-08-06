@@ -8,7 +8,7 @@ import numpy as np
 import shutil
 
 #Todo: Suggest adding a propagatorerror
-#from .base import Propagator, PropagatorError
+from .base import Propagator, PropagatorError
 #Reads as: westpa.core.propagators.base.PropagatorError: Engine None was not found.
 from ..sim_manager import PropagationError
 #Reads as: westpa.core.sim_manager.PropagationError: Engine None was not found.
@@ -62,8 +62,7 @@ class AmberPropagator(SubprocessPropagator):
 
         # ===== start command construction handling =====
         if not shutil.which(self.engine):
-            raise PropagationError(f"Engine {self.engine} not found in PATH.")
-            #raise PropagatorError(f"Engine {self.engine} was not found.")
+            raise PropagatorError(f"Engine {self.engine} not found in PATH.")
 
         cmd=self.engine
         topology_flag= f"-p {self.prmtop_file}"
