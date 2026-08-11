@@ -24,6 +24,7 @@ __all__ = [
     'AmberPropagator',
     'GromacsPropagator',
     'OpenMMPropagator',
+    'AmberPropagator',
     'Plugin',
     'TrajectoryTree',
     'Trajectory',
