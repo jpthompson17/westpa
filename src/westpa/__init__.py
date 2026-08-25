@@ -19,9 +19,11 @@ __all__ = [
     'Source',
     'Sink',
     'Propagator',
+    'SerialPropagator',
+    'VectorizedPropagator',
+    'AmberPropagator',
     'GromacsPropagator',
     'OpenMMPropagator',
-    'AmberPropagator', 
     'Plugin',
     'TrajectoryTree',
     'Trajectory',
@@ -35,7 +37,7 @@ import shutil
 
 from .core.state import State
 from .core.segment import Segment
-from .core.propagators import Propagator
+from .core.propagators import SerialPropagator, VectorizedPropagator
 from .core.binning import (
     Bin,
     BinMapper,
@@ -66,12 +68,8 @@ try:
 except ImportError:
     pass
 
-
 if shutil.which("sander"):
     from .core.propagators._amber import AmberPropagator
-
-
-
 
 from .analysis import TrajectoryTree, Trajectory
 
