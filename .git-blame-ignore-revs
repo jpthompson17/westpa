@@ -1,0 +1,37 @@
+# Commits for `git blame` to skip.
+#
+# These are mechanical commits -- reformatting, and changes that were later
+# reverted -- whose net effect on the tree is nothing. Skipping them keeps blame
+# pointing at whoever last changed a line's meaning.
+#
+# Enable for this clone with:
+#     git config blame.ignoreRevsFile .git-blame-ignore-revs
+#
+# Entries must be full 40-character hashes; git rejects abbreviated ones.
+#
+# When a change and its revert are both on the branch, list both. Skipping only
+# the revert would blame the restored lines on the change that was undone,
+# rather than on the original author.
+
+# core.states -- BasisState/InitialState rework, reverted in stages.
+# The file is now identical to develop.
+
+431def0f01589a3dc213f7597bf7cc9500bf5ed9  # 2025-08-06 Extend BasisState to accept any JSON-serializable object for 'label'.
+a8fed2db7d1129424f5aa626e46a87262d9b53e9  # 2025-08-07 Add 'label' setter to BasisState, add 'external_id' attribute to Initi
+0398d85de9e64ff5a27baab2f4be5c9e9f82971d  # 2025-08-07 Revise docstrings and error messages. Restore use of str(b, encoding='
+f14f869ec94163c8dbed4f7a8bfa0eb68eff1839  # 2025-09-05 Add Microstate base class; remove 'external_id' attribute from BasisSt
+454e2f3a842cae05b65ae7bad0a69052234d2757  # 2025-09-05 Refactor core.states and add AuxiliaryData class.
+da9630941fb7d64f2dffae8b1504d8a17d641a87  # 2025-09-22 Revert "Add 'state_id' attribute to Microstate. Add 'identifier' param
+5f47a834be63af8fb1108730d90f7c3bb7556be1  # 2025-09-22 Revert "Refactor core.states and add AuxiliaryData class."
+536f871a38911b3ae9d03790ad2d476eba11a111  # 2025-09-22 Revert "Add Microstate base class; remove 'external_id' attribute from
+ad1f07c4c42b648fa8d597a538ada298d75204eb  # 2025-09-22 Revert "Revise docstrings and error messages. Restore use of str(b, en
+83de0252366bcc15dab73fca078e45f1f4920627  # 2025-09-23 Revert "Add 'label' setter to BasisState, add 'external_id' attribute
+e78a7399e29996485a0e731ad12296b6557f6fd6  # 2025-09-23 Revert "Extend BasisState to accept any JSON-serializable object for '
+7fb171058e84ed2d9c5ce0491a09d22cc269b6f3  # 2025-10-02 Revert "Revert "Add 'label' setter to BasisState, add 'external_id' at
+14a5f367e8ab6f0b54116f6d764ed57362fbf533  # 2025-10-07 Revert changes to core.states; remove core._dataset and core._executab
+
+# core.systems -- reverted wholesale; file is identical to develop.
+c1180b5750a7957a468ef07f5b3bbc78c53adef9  # 2025-10-08 Revert changes to core.systems.
+
+# work_managers -- docstring-only reformatting, reverted.
+18e417cebbfe7c9016c2ceb054d118fdae1448bc  # 2026-10-06 Revert docstring reformatting in work_managers.
