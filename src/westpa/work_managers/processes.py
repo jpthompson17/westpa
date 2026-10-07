@@ -21,14 +21,7 @@ result_shutdown_sentinel = ('shutdown', None, None)
 
 
 class ProcessWorkManager(WorkManager):
-    """Executes calls asynchronously using a pool of processes.
-
-    Parameters
-    ----------
-    n_workers : int
-        Number of processes.
-    shutdown_timeout : int, option
-        Timeout (in seconds) for terminating processes on shutdown.
+    '''A work manager using the ``multiprocessing`` module.
 
     Notes
     -----
@@ -44,7 +37,7 @@ class ProcessWorkManager(WorkManager):
 
     See https://docs.python.org/3/library/multiprocessing.html#contexts-and-start-methods and
     https://docs.python.org/3/library/multiprocessing.html#the-spawn-and-forkserver-start-methods for more details.
-    """
+    '''
 
     @classmethod
     def from_environ(cls, wmenv=None):
@@ -158,7 +151,7 @@ class ProcessWorkManager(WorkManager):
             self.receive_thread.start()
 
     def _empty_queues(self):
-        """Empty self.task_queue and self.result_queue until queue is empty"""
+        '''Empty self.task_queue and self.result_queue until queue is empty'''
         try:
             while True:
                 self.task_queue.get_nowait()

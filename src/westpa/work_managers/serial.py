@@ -7,8 +7,6 @@ log = logging.getLogger(__name__)
 
 
 class SerialWorkManager(WorkManager):
-    """Executes calls serially."""
-
     @classmethod
     def from_environ(cls, wmenv=None):
         return cls()
