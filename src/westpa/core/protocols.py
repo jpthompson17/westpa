@@ -27,10 +27,10 @@ class Propagator(Protocol):
     -----
     A propagator may optionally define a ``block_size`` attribute. Its value
     (a positive integer or None) indicates to the calling
-    :class:`~westpa.Simulation` the maximum number of segments to pass to the
-    propagator in a single call. If ``block_size`` is None or undefined,
-    no chunking of input is done (i.e., prepared segments are all
-    passed in a single call).
+    :class:`~westpa.Simulation` instance the maximum number of segments to
+    pass to the propagator in a single call. If ``block_size`` is None or
+    undefined, input is not chunked (i.e., prepared segments are all passed
+    in a single call).
 
     Examples
     --------
@@ -45,8 +45,10 @@ class Propagator(Protocol):
     """
 
     def __call__(self, segments: Sequence[Segment]) -> Sequence[Segment]:
-        """Propagate a set of segments. Propagating a segment consists of
-        reading its ``initial_state`` and setting its ``final_state``.
+        """Propagate a set of segments.
+
+        Propagating a segment consists of reading its ``initial_state`` and
+        setting its ``final_state``.
         Besides setting ``final_state``, a propagator may also modify the
         ``pcoord``, ``data``, ``walltime``, or ``cputime`` attributes.
 
@@ -89,20 +91,21 @@ class PCoordCalculator(Protocol):
             is a segment, a time series (2-D array) with at least two points,
             corresponding to the initial and final states of the segment.
         data : Mapping[str, array_like], optional
-            Dictionary of named arrays to store as auxiliary data.
+            Auxiliary coordinate data.
 
         Examples
         --------
-        Use the raw coordinates as progress coordinates (default behavior):
-
         >>> import westpa
+
+        Use the raw coordinates as progress coordinates (as :class:`Simulation`
+        does by default):
+
         >>> def default_pcoord_calculator(obj):
         ...     if isinstance(obj, westpa.State):
         ...         return obj.coord
         ...     else:
         ...         return obj.initial_state.coord, obj.final_state.coord
         ...
-
 
         """
         ...
