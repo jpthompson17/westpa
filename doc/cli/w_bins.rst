@@ -119,18 +119,3 @@ Input Options
   -W WEST_H5FILE, --west_data WEST_H5FILE
     Take WEST data from WEST_H5FILE (default: read from the HDF5 file
     specified in west.cfg).
-
-Examples
---------
-
-(TODO: Write up an example)
-
-
-westpa.cli.tools.w\_bins module
--------------------------------
-
-.. automodule:: westpa.cli.tools.w_bins
-   :members:
-   :undoc-members:
-   :show-inheritance:
-   :imported-members:

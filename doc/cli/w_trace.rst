@@ -108,13 +108,3 @@ output options
                         the trajectory being traced. (Default: traj_%d_%d.)
   -o OUTPUT, --output OUTPUT
                         Store intermediate data and analysis results to OUTPUT (default: trajs.h5).
-
-
-westpa.cli.tools.w\_trace module
---------------------------------
-
-.. automodule:: westpa.cli.tools.w_trace
-   :members:
-   :undoc-members:
-   :show-inheritance:
-   :imported-members:

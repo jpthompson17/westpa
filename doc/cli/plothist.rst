@@ -243,13 +243,3 @@ probability distribution for the 5th iteration, representing the first
 two progress coordinates as a heatmap
 
 ``plothist instant pdist.h5 0 1 --iter 5 --linear``
-
-
-westpa.cli.tools.plothist module
---------------------------------
-
-.. automodule:: westpa.cli.tools.plothist
-   :members:
-   :undoc-members:
-   :show-inheritance:
-   :imported-members:

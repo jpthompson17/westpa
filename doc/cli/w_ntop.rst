@@ -85,13 +85,3 @@ output options::
 
   -o OUTPUT, --output OUTPUT
                         Write output to OUTPUT (default: ntop.h5).
-
-
-westpa.cli.tools.w\_ntop module
--------------------------------
-
-.. automodule:: westpa.cli.tools.w_ntop
-   :members:
-   :undoc-members:
-   :show-inheritance:
-   :imported-members:

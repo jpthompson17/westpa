@@ -126,17 +126,3 @@ otherwise preprocess the progress coordinate data.::
     array indexable as [seg_id][timepoint][dimension]. The
     **default** function returns the 'pcoord' dataset for that iteration
     (i.e. the function executes return iter_group['pcoord'][...])
-
-Examples
---------
-
-
-
-westpa.cli.tools.w\_assign module
----------------------------------
-
-.. automodule:: westpa.cli.tools.w_assign
-   :members:
-   :undoc-members:
-   :show-inheritance:
-   :imported-members:

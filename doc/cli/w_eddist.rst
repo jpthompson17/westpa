@@ -201,12 +201,3 @@ options for ZeroMQ ("zmq") work manager (master or node)::
                         computer systems that start all processes simultaneously.
   --zmq-shutdown-timeout SHUTDOWN_TIMEOUT
                         Amount of time (in seconds) to wait for workers to shut down.
-
-westpa.cli.tools.w\_eddist module
----------------------------------
-
-.. automodule:: westpa.cli.tools.w_eddist
-   :members:
-   :undoc-members:
-   :show-inheritance:
-   :imported-members:

@@ -111,12 +111,3 @@ Same as above, except using the serial work manager (which may be more
 efficient for smaller datasets)::
 
   w_pdist --serial
-
-westpa.cli.tools.w\_pdist module
---------------------------------
-
-.. automodule:: westpa.cli.tools.w_pdist
-   :members:
-   :undoc-members:
-   :show-inheritance:
-   :imported-members:

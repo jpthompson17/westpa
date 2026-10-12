@@ -39,13 +39,3 @@ Running the following will remove iteration 50 and all iterations after 50 from 
 ::
 
     w_truncate -n 50 -W multi.h5
-
-
-westpa.cli.core.w\_truncate module
-----------------------------------
-
-.. automodule:: westpa.cli.core.w_truncate
-   :members:
-   :undoc-members:
-   :show-inheritance:
-   :imported-members:

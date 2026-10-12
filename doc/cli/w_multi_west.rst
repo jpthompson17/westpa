@@ -87,12 +87,3 @@ run the code.
 
 To proceed in analyzing the aggregated simulation data as a single 
 simulation, rename the output file ``multi.h5`` to ``west.h5``.
-
-westpa.cli.tools.w\_multi\_west module
---------------------------------------
-
-.. automodule:: westpa.cli.tools.w_multi_west
-   :members:
-   :undoc-members:
-   :show-inheritance:
-   :imported-members:

@@ -99,14 +99,3 @@ Calculate the mean flux confidence intervals using a custom bootstrap
 sample size of 500::
 
   w_fluxanl --n-sets 500
-
-
-
-westpa.cli.tools.w\_fluxanl module
-----------------------------------
-
-.. automodule:: westpa.cli.tools.w_fluxanl
-   :members:
-   :undoc-members:
-   :show-inheritance:
-   :imported-members:

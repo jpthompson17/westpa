@@ -77,20 +77,3 @@ State Options
   --no-we, --shotgun
     Do not run the weighted ensemble bin/split/merge algorithm on
     newly-created segments.
-
-Examples
---------
-
-(TODO: write 3 examples; Setting up the basis states, explanation of
-bstates and istates. Setting up an equilibrium simulation, w/o target(s)
-for recycling. Setting up a simulation with one/multiple target states.)
-
-
-westpa.cli.core.w\_init module
-------------------------------
-
-.. automodule:: westpa.cli.core.w_init
-   :members:
-   :undoc-members:
-   :show-inheritance:
-   :imported-members:

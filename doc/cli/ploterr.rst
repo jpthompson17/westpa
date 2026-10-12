@@ -33,12 +33,3 @@ supported input formats::
     rw.probs            output of w_reweight probs
     rw.kinetics         output of w_reweight kinetics
     generic             arbitrary HDF5 file and dataset
-
-westpa.cli.tools.ploterr module
--------------------------------
-
-.. automodule:: westpa.cli.tools.ploterr
-   :members:
-   :undoc-members:
-   :show-inheritance:
-   :imported-members:

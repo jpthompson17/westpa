@@ -33,13 +33,3 @@ WEST input data options::
   -W WEST_H5FILE, --west-data WEST_H5FILE
                         Take WEST data from WEST_H5FILE (default: read from the HDF5 file specified in
                         west.cfg).
-
-
-westpa.cli.core.w\_succ module
-------------------------------
-
-.. automodule:: westpa.cli.core.w_succ
-   :members:
-   :undoc-members:
-   :show-inheritance:
-   :imported-members:

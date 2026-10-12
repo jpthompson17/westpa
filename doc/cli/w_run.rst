@@ -41,12 +41,3 @@ is available in the main WESTPA distribution)::
 This commands starts up a serial weighted ensemble run and pipes the results
 into the west.log file. As a side note ``--debug`` option is very useful for
 debugging the code if something goes wrong.
-
-westpa.cli.core.w\_run module
------------------------------
-
-.. automodule:: westpa.cli.core.w_run
-   :members:
-   :undoc-members:
-   :show-inheritance:
-   :imported-members:
