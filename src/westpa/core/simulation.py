@@ -78,23 +78,28 @@ class Simulation:
     Parameters
     ----------
     datafile : path-like or io.BytesIO
-        HDF5 file used to store simulation data.
+        HDF5 file used to store simulation data. If an in-memory stream is
+        given, it is the user's responsibility to write the buffer to a file.
     propagator : :class:`~westpa.Propagator`
         Routine for propagating trajectories forward in time.
     pcoord_calculator : :class:`~westpa.PCoordCalculator`, optional
-        Routine for computing progress coordinates.
-        By default, the progress coordinates of a state are identical to
-        its raw coordinates (specified by the ``coord`` attribute), and the
-        progress coordinates of a segment are inferred from its initial and
-        final states.
+        Routine for computing progress coordinates. By default, the raw
+        :class:`State` coordinates are used as progress coordinates,
+        equivalent to passing::
+
+            def default_pcoord_calculator(obj):
+                if isinstance(obj, westpa.State):
+                    return obj.coord
+                elif isinstance(obj, westpa.Segment):
+                    return obj.initial_state.coord, obj.final_state.coord
+
     bin_mapper : :class:`~westpa.BinMapper`, optional
         Routine for assigning trajectories to bins. By default, all the
         trajectories are assigned to a single bin.
     bin_target_counts : int or sequence of int, default 1
-        Target number of trajectories (allocation) for each bin. Value(s) must
-        be positive. If an integer is given, its value is applied to all the
-        bins. If a sequence is given, its length must match the number of bins
-        returned by `bin_mapper`.
+        Target number of trajectories (allocation) for each bin. If an integer
+        is given, its value is applied to all the bins. If a sequence is given,
+        its length must match the ``nbins`` attribute of `bin_mapper`.
     resampler : :class:`~westpa.Resampler`, optional
         Routine for resampling the trajectories in each bin. Defaults to
         :class:`~westpa.HuberKimResampler()`.
@@ -127,7 +132,7 @@ class Simulation:
     source : Source or None
         Source distribution.
     sinks : tuple of Sink
-        Sink region(s).
+        Sink (target) regions.
     istate_generator : callable or None
         Initial state generator.
     executor : concurrent.futures.Executor
@@ -310,7 +315,7 @@ class Simulation:
         states : State or iterable of State
             States from which to initiate trajectories (one per trajectory).
         weights : sequence of float, optional
-            Weight to assign each trajectory. Defaults to a uniform distribution.
+            Weight to assign each trajectory (uniform by default).
 
         """
         if self.initialized:
@@ -419,8 +424,10 @@ class Simulation:
         logger.info('WESTPA run complete.')
 
     def enable_recycling(self, source, sink, istate_generator=None):
-        """Enable source-sink boundary conditions (recycling). This method
-        overwrites any previously defined source and sink(s).
+        """Enable source-sink boundary conditions.
+
+        This method overwrites the ``source``, ``sink``, and
+        ``istate_generator`` attributes.
 
         Parameters
         ----------
@@ -455,7 +462,12 @@ class Simulation:
         self._istate_generator = istate_generator
 
     def disable_recycling(self):
-        """Disable recycling."""
+        """Disable source-sink boundary conditions.
+
+        This method clears the ``source``, ``sink``, and ``istate_generator``
+        attributes.
+
+        """
         self._source = None
         self._sinks = ()
         self._istate_generator = None

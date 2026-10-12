@@ -151,9 +151,9 @@ class Sink(Container):
 
     Test for membership:
 
-    >>> westpa.Segment(pcoord=[[0.0], [0.9]]) in sink
+    >>> westpa.Segment(pcoord=[[1.0], [0.9]]) in sink
     False
-    >>> westpa.Segment(pcoord=[[0.0], [1.1]]) in sink
+    >>> westpa.Segment(pcoord=[[1.0], [1.1]]) in sink
     True
 
     """

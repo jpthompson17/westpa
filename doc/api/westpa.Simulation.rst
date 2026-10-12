@@ -2,3 +2,5 @@
 =================
 
 .. autoclass:: westpa.Simulation
+   :members:
+

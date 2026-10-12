@@ -90,8 +90,9 @@ class PCoordCalculator(Protocol):
             If `obj` is a state, a coordinate point (1-D array). If `obj`
             is a segment, a time series (2-D array) with at least two points,
             corresponding to the initial and final states of the segment.
-        data : Mapping[str, array_like], optional
-            Auxiliary coordinate data.
+        aux_coords : Mapping[str, array_like], optional
+            Auxiliary coordinate data. Arrays must follow the same shape
+            rules as the `pcoord` array.
 
         Examples
         --------

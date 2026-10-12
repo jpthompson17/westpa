@@ -26,7 +26,6 @@ class _PropagatorBase(ABC):
 
     @property
     def block_size(self):
-        """Chunk size for propagation tasks."""
         return self._block_size
 
     @block_size.setter
@@ -40,7 +39,6 @@ class _PropagatorBase(ABC):
 
     @property
     def root_seed(self):
-        """Root seed integer."""
         return self._root_seed
 
     @root_seed.setter
@@ -54,7 +52,6 @@ class _PropagatorBase(ABC):
 
     @property
     def bit_generator_type(self):
-        """Algorithm for generating random bits."""
         return self._bit_generator_type
 
     @bit_generator_type.setter
@@ -65,7 +62,6 @@ class _PropagatorBase(ABC):
 
     @property
     def segment_dir_template(self):
-        """Segment output directory template."""
         return self._segment_dir_template
 
     @segment_dir_template.setter
@@ -107,18 +103,18 @@ class SerialPropagator(_PropagatorBase):
 
     Parameters
     ----------
-    block_size : int, default 1
-        Maximum number of segments to pass to the propagator in a single call.
+    block_size : int, optional
+        Chunk size (in number of segments) for calls to the propagator.
+        Used by the calling :class:`Simulation` instance for scheduling tasks.
     root_seed : int, optional
-        Root seed integer. Must be nonnegative. Used to reproducibly seed
-        the pseudorandom number generator (PRNG) passed to the
-        :meth:`propagate` method. Defaults to ``secrets.randbits(128)``.
-    bit_generator_type : type, optional
-        Subclass of ``numpy.random.BitGenerator`` specifying the PRNG
-        algorithm to use. Defaults to ``numpy.random.PCG64``.
+        Root seed integer for seeding the pseudorandom number generator (PRNG)
+        passed to the :meth:`propagate` method.
+        Defaults to ``secrets.randbits(128)``.
+    bit_generator_type : subclass of numpy.random.BitGenerator, optional
+        PRNG algorithm to use. Defaults to ``numpy.random.PCG64``.
     segment_dir_template : str, optional
-        Path template used by the :meth:`make_segment_dir` method. Must
-        contain ``{n_iter}`` and ``{seg_id}`` replacement fields. If a
+        Output path template used by the :meth:`make_segment_dir` method.
+        Must contain ``{n_iter}`` and ``{seg_id}`` replacement fields. If a
         relative path is provided, it is assumed to be relative to the
         current working directory.
         Defaults to ``'traj_segs/{n_iter:06d}/{seg_id:06d}'``.
@@ -126,9 +122,13 @@ class SerialPropagator(_PropagatorBase):
     Attributes
     ----------
     block_size : int or None
+        Chunk size for calls to the propagator.
     root_seed : int
+        Root seed integer.
     bit_generator_type : type
+        PRNG algorithm.
     segment_dir_template : str
+        Path template for per-segment output directories.
 
     Examples
     --------
@@ -216,17 +216,17 @@ class VectorizedPropagator(_PropagatorBase):
     Parameters
     ----------
     block_size : int, optional
-        Maximum number of segments to pass to the propagator in a given call.
+        Chunk size (in number of segments) for calls to the propagator.
+        Used by the calling :class:`Simulation` instance for scheduling tasks.
     root_seed : int, optional
-        Root seed integer. Must be nonnegative. Used to reproducibly seed
-        the pseudorandom number generator (PRNG) passed to the
-        :meth:`propagate` method. Defaults to ``secrets.randbits(128)``.
-    bit_generator_type : type, optional
-        Subclass of ``numpy.random.BitGenerator`` specifying the PRNG
-        algorithm to use. Defaults to ``numpy.random.PCG64``.
+        Root seed integer for seeding the pseudorandom number generator (PRNG)
+        passed to the :meth:`propagate` method.
+        Defaults to ``secrets.randbits(128)``.
+    bit_generator_type : subclass of numpy.random.BitGenerator, optional
+        PRNG algorithm to use. Defaults to ``numpy.random.PCG64``.
     segment_dir_template : str, optional
-        Path template used by the :meth:`make_segment_dir` method. Must
-        contain ``{n_iter}`` and ``{seg_id}`` replacement fields. If a
+        Output path template used by the :meth:`make_segment_dir` method.
+        Must contain ``{n_iter}`` and ``{seg_id}`` replacement fields. If a
         relative path is provided, it is assumed to be relative to the
         current working directory.
         Defaults to ``'traj_segs/{n_iter:06d}/{seg_id:06d}'``.
@@ -234,9 +234,13 @@ class VectorizedPropagator(_PropagatorBase):
     Attributes
     ----------
     block_size : int or None
+        Chunk size for calls to the propagator.
     root_seed : int
+        Root seed integer.
     bit_generator_type : type
+        PRNG algorithm.
     segment_dir_template : str
+        Path template for per-segment output directories.
 
     Examples
     --------
