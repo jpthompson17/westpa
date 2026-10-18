@@ -25,6 +25,7 @@ __all__ = [
     'ResidualResampler',
     'StratifiedResampler',
     'SystematicResampler',
+    'MDStoragePlugin',
     'WESTSystem',
     'BasisState',
     'TargetState',
@@ -60,6 +61,11 @@ try:
     from .core.propagators._openmm import OpenMMPropagator
 except ImportError:
     OpenMMPropagator = None
+
+try:
+    from .core.plugins._md_storage import MDStoragePlugin
+except ImportError:
+    MDStoragePlugin = None
 
 from .core.states import BasisState, TargetState
 from .core.systems import WESTSystem

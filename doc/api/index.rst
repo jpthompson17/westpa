@@ -84,3 +84,14 @@ Resampling
    ~westpa.StratifiedResampler
    ~westpa.SystematicResampler
 
+
+Plugins
+-------
+
+.. autosummary::
+   :caption: Plugins
+   :toctree:
+   :nosignatures:
+
+   ~westpa.MDStoragePlugin
+
