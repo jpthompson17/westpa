@@ -760,7 +760,8 @@ class WEDriver:
         if abs(1.0 - tprob) > len(weights) * EPS:
             pscale = 1.0 / tprob
             log.warning('Weights of initial segments do not sum to unity; scaling by {:g}'.format(pscale))
-            segments = [segment.copy(weight=segment.weight * pscale) for segment in segments]
+            for segment in segments:
+                segment.weight *= pscale
 
         self.assign(segments, initializing=True)
         self.construct_next()

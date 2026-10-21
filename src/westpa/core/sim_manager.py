@@ -428,7 +428,8 @@ class WESimManager:
 
         if not abs(1 - norm) < EPS * (len(segments) + n_active_bins):
             pstatus("Normalization check failed at w_init, explicitly renormalizing")
-            segments = [segment.copy(weight=segment.weight / norm) for segment in segments]
+            for segment in segments:
+                segment.weight /= norm
 
         # Send the segments over to the data manager to commit to disk
         data_manager.current_iteration = 1
