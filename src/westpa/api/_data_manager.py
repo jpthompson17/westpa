@@ -2,15 +2,16 @@
 
 Note that bin mappers, sources (basis states), and sinks (target states)
 are not saved in the HDF5 file. As currently implemented, the Python API
-views this data as part of the "external configuration" of a simulation.
+views this data as part of the "external configuration" of a simulation,
+to be managed and tracked by the user.
 
 The rationale for removing the 'bin_topologies' and 'tstates' groups from
 the HDF5 file was twofold: (1) bin mappers and sinks are not, in general,
 picklable; and (2) even if they were, do we want to be storing pickles?
 The 'ibstates' group was removed to maintain symmetry with 'tstates'.
 
-Version history
-    Version 11
+Version history:
+    Version 11beta1
         - Added 'initial_states' and 'final_states' datasets.
         - Removed 'bin_topologies' group.
         - Removed 'ibstates' and 'tstates' groups.
@@ -39,7 +40,7 @@ from .segment import Segment
 
 logger = logging.getLogger(__name__)
 
-file_format_version = 11
+file_format_version = '11beta1'
 
 
 def state_to_numpy(state):
