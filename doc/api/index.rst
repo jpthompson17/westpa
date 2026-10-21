@@ -9,11 +9,11 @@ Representation
    :toctree:
    :nosignatures:
 
-   ~westpa.State
-   ~westpa.Segment
-   ~westpa.Bin
-   ~westpa.Source
-   ~westpa.Sink
+   ~westpa.api.State
+   ~westpa.api.Segment
+   ~westpa.api.Bin
+   ~westpa.api.Source
+   ~westpa.api.Sink
 
 
 Simulation
@@ -24,7 +24,20 @@ Simulation
    :toctree:
    :nosignatures:
 
-   ~westpa.Simulation
+   ~westpa.api.Simulation
+
+
+Analysis and visualization
+--------------------------
+
+.. autosummary::
+   :caption: Analysis and visualization
+   :toctree:
+   :nosignatures:
+
+   ~westpa.api.TrajectoryTree
+   ~westpa.api.TrajectoryTreeView
+
 
 Dynamics propagation
 --------------------
@@ -34,12 +47,12 @@ Dynamics propagation
    :toctree:
    :nosignatures:
 
-   ~westpa.Propagator
-   ~westpa.SerialPropagator
-   ~westpa.VectorizedPropagator
-   ~westpa.AmberPropagator
-   ~westpa.GROMACSPropagator
-   ~westpa.OpenMMPropagator
+   ~westpa.api.Propagator
+   ~westpa.api.SerialPropagator
+   ~westpa.api.VectorizedPropagator
+   ~westpa.api.AmberPropagator
+   ~westpa.api.GROMACSPropagator
+   ~westpa.api.OpenMMPropagator
 
 Calculating progress coordinates
 --------------------------------
@@ -49,7 +62,7 @@ Calculating progress coordinates
    :toctree:
    :nosignatures:
 
-   ~westpa.PCoordCalculator
+   ~westpa.api.PCoordCalculator
 
 
 Binning
@@ -60,12 +73,12 @@ Binning
    :toctree:
    :nosignatures:
 
-   ~westpa.BinMapper
-   ~westpa.BinMapperBase
-   ~westpa.RectilinearBinMapper
-   ~westpa.VoronoiBinMapper
-   ~westpa.MABBinMapper
-   ~westpa.RecursiveBinMapper
+   ~westpa.api.BinMapper
+   ~westpa.api.BinMapperBase
+   ~westpa.api.RectilinearBinMapper
+   ~westpa.api.VoronoiBinMapper
+   ~westpa.api.MABBinMapper
+   ~westpa.api.RecursiveBinMapper
 
 
 Resampling
@@ -76,13 +89,13 @@ Resampling
    :toctree:
    :nosignatures:
 
-   ~westpa.Resampler
-   ~westpa.ResamplerBase
-   ~westpa.HuberKimResampler
-   ~westpa.MultinomialResampler
-   ~westpa.ResidualResampler
-   ~westpa.StratifiedResampler
-   ~westpa.SystematicResampler
+   ~westpa.api.Resampler
+   ~westpa.api.ResamplerBase
+   ~westpa.api.HuberKimResampler
+   ~westpa.api.MultinomialResampler
+   ~westpa.api.ResidualResampler
+   ~westpa.api.StratifiedResampler
+   ~westpa.api.SystematicResampler
 
 
 Plugins
@@ -93,5 +106,5 @@ Plugins
    :toctree:
    :nosignatures:
 
-   ~westpa.MDStoragePlugin
+   ~westpa.api.MDStoragePlugin
 
