@@ -1,3 +1,24 @@
+"""HDF5 data manager for the Python API.
+
+Note that bin mappers, sources (basis states), and sinks (target states)
+are not saved in the HDF5 file. As currently implemented, the Python API
+views this data as part of the "external configuration" of a simulation.
+
+The rationale for removing the 'bin_topologies' and 'tstates' groups from
+the HDF5 file was twofold: (1) bin mappers and sinks are not, in general,
+picklable; and (2) even if they were, do we want to be storing pickles?
+The 'ibstates' group was removed to maintain symmetry with 'tstates'.
+
+Version history
+    Version 11
+        - Added 'initial_states' and 'final_states' datasets.
+        - Removed 'bin_topologies' group.
+        - Removed 'ibstates' and 'tstates' groups.
+    Version <= 10
+        See westpa.core.data_manager.
+
+"""
+
 import logging
 from operator import attrgetter
 
@@ -14,8 +35,11 @@ from westpa.core.data_manager import (
     require_dataset_from_dsopts,
 )
 from .state import State
+from .segment import Segment
 
 logger = logging.getLogger(__name__)
+
+file_format_version = 11
 
 
 def state_to_numpy(state):
@@ -39,6 +63,11 @@ class DataManager(WESTDataManager):
     def __init__(self, h5filename):
         super().__init__()
         self.we_h5filename = h5filename
+
+    def prepare_backing(self):
+        super().prepare_backing()
+        with self.flushing_lock():
+            self.we_h5file['/'].attrs['west_file_format_version'] = file_format_version
 
     def prepare_iteration(self, n_iter, segments):
         logger.debug('preparing HDF5 group for iteration %d (%d segments)' % (n_iter, len(segments)))
@@ -209,7 +238,7 @@ class DataManager(WESTDataManager):
                         del dsets[dsname]
 
     def write_initial_states(self, n_iter, segments):
-        """Write :attr:`~westpa.Segment.initial_state` data for a set of segments.
+        """Write ``initial_state`` data for a set of segments.
 
         Parametes
         ---------
@@ -246,7 +275,7 @@ class DataManager(WESTDataManager):
             dsid.write(msel, fsel, entries)
 
     def write_final_states(self, n_iter, segments):
-        """Write :attr:`~westpa.Segment.final_state` data for a set of segments.
+        """Write ``final_state`` data for a set of segments.
 
         Parametes
         ---------
@@ -283,7 +312,7 @@ class DataManager(WESTDataManager):
             dsid.write(msel, fsel, entries)
 
     def write_pcoords(self, n_iter, segments):
-        """Write :attr:`~westpa.Segment.pcoord` data for a set of segments.
+        """Write ``pcoord`` data for a set of segments.
 
         Parametes
         ---------
@@ -322,8 +351,9 @@ class DataManager(WESTDataManager):
             dsid.write(msel, fsel, entries)
 
     def get_segments(self, n_iter=None, seg_ids=None, load_pcoords=True, load_auxdata=False):
-        segments = super().get_segments(n_iter, seg_ids, load_pcoords=False)
-        seg_ids = [s.seg_id for s in segments]
+        iterable = super().get_segments(n_iter, seg_ids, load_pcoords=False)
+        segments = list(map(Segment.from_core, iterable))
+        seg_ids = list(map(attrgetter('seg_id'), segments))
 
         with self.lock:
             iter_group = self.get_iter_group(n_iter or self.current_iteration)

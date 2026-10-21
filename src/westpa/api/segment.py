@@ -1,57 +1,13 @@
 import enum
 import inspect
-from collections import UserDict
-from collections.abc import MutableSet
 
 import numpy as np
 
+import westpa.core.segment
 from .state import State
 
 
-# Used to validate the 'data' attribute.
-# Ensures that keys are strings and values are non-object arrays.
-class _AuxiliaryData(UserDict):
-
-    def __setitem__(self, key, value):
-        if not isinstance(key, str):
-            raise TypeError('keys must be strings, not ' + type(value).__name__)
-        if not key.startswith('iterh5/'):  # TODO: Remove this exception.
-            value = np.asarray(value)
-            if value.dtype == object:
-                raise TypeError('object arrays are not supported')
-        super().__setitem__(key, value)
-
-
-# Used to validate the 'wtg_parent_ids' attribute.
-class _IntegerSet(MutableSet):
-
-    def __init__(self, iterable=None):
-        self._data = set()
-        for elem in iterable or ():
-            self.add(elem)
-
-    def __repr__(self):
-        return repr(self._data)
-
-    def __contains__(self, item):
-        return item in self._data
-
-    def __iter__(self):
-        return iter(self._data)
-
-    def __len__(self):
-        return len(self._data)
-
-    def add(self, elem):
-        if not isinstance(elem, int):
-            raise TypeError(f"elements must be integers, not {type(elem).__name__}")
-        self._data.add(elem)
-
-    def discard(self, elem):
-        self._data.discard(elem)
-
-
-class Segment:
+class Segment(westpa.core.segment.Segment):
     """Represents a trajectory segment.
 
     Parameters
@@ -80,8 +36,8 @@ class Segment:
         Wall-clock time (in seconds) taken for propagation. Defaults to zero.
     cputime : float, optional
         CPU time (in seconds) taken for propagation. Defaults to zero.
-    data : Mapping[str, array_like], optional
-        Auxiliary data. Object arrays are not supported.
+    data : dict, optional
+        Auxiliary data.
     initial_state : State, optional
         Initial state of the segment.
     final_state : State, optional
@@ -97,11 +53,11 @@ class Segment:
         Statistical weight.
     parent_id : int or None
         Parent index.
-    wtg_parent_ids : MutableSet[int]
+    wtg_parent_ids : set of int
         Weight transfer graph parent indices.
     pcoord : numpy.ndarray or None
         Progress coordinate time series.
-    status : Segment.Status
+    status : Segment.Status or None
         Propagation status.
     initpoint_type : Segment.InitPoint
         Whether the segment continues a trajectory or starts a new trajectory.
@@ -111,7 +67,7 @@ class Segment:
         Wall-clock time taken for propagation.
     cputime : float
         CPU time taken for propagation.
-    data : MutableMapping[str, numpy.ndarray]
+    data : dict
         Auxiliary data.
     initial_state : State or None
         Initial state.
@@ -165,23 +121,6 @@ class Segment:
     initpoint_type_names = {member.value: f'SEG_INITPOINT_{member.name}' for member in InitPoint}
     endpoint_type_names = {member.value: f'SEG_ENDPOINT_{member.name}' for member in EndPoint}
 
-    @property
-    def status_text(self):
-        return self.status_names[self.status]
-
-    @property
-    def endpoint_type_text(self):
-        return self.endpoint_type_names[self.endpoint_type]
-
-    # convenience functions for binning
-    @staticmethod
-    def initial_pcoord(segment):
-        return segment.pcoord[0]
-
-    @staticmethod
-    def final_pcoord(segment):
-        return segment.pcoord[-1]
-
     def __init__(
         self,
         n_iter=None,
@@ -198,44 +137,21 @@ class Segment:
         initial_state=None,
         final_state=None,
     ):
-        if weight is not None:
-            weight = float(weight)
-            if not (0 <= weight <= 1):
-                raise ValueError("'weight' must be between 0 and 1")
-
-        self.n_iter = n_iter
-        self.seg_id = seg_id
-        self._weight = weight  # read-only
-        self.endpoint_type = endpoint_type
-        self.parent_id = parent_id
-        self.wtg_parent_ids = wtg_parent_ids
-        self.pcoord = pcoord
-        self.status = status
-        self.walltime = walltime
-        self.cputime = cputime
-        self.data = data
+        super().__init__(
+            n_iter=n_iter,
+            seg_id=seg_id,
+            weight=weight,
+            endpoint_type=endpoint_type,
+            parent_id=parent_id,
+            wtg_parent_ids=wtg_parent_ids,
+            pcoord=pcoord,
+            status=status,
+            walltime=walltime,
+            cputime=cputime,
+            data=data,
+        )
         self.initial_state = initial_state
         self.final_state = final_state
-
-    @property
-    def n_iter(self):
-        return self._n_iter
-
-    @n_iter.setter
-    def n_iter(self, value):
-        self._n_iter = int(value) if value is not None else None
-
-    @property
-    def seg_id(self):
-        return self._seg_id
-
-    @seg_id.setter
-    def seg_id(self, value):
-        self._seg_id = int(value) if value is not None else None
-
-    @property
-    def weight(self):
-        return self._weight
 
     @property
     def initpoint_type(self):
@@ -253,22 +169,6 @@ class Segment:
     @endpoint_type.setter
     def endpoint_type(self, value):
         self._endpoint_type = Segment.EndPoint(value) if value else Segment.EndPoint.UNSET
-
-    @property
-    def parent_id(self):
-        return self._parent_id
-
-    @parent_id.setter
-    def parent_id(self, value):
-        self._parent_id = int(value) if value is not None else None
-
-    @property
-    def wtg_parent_ids(self):
-        return self._wtg_parent_ids
-
-    @wtg_parent_ids.setter
-    def wtg_parent_ids(self, value):
-        self._wtg_parent_ids = _IntegerSet(value)
 
     @property
     def pcoord(self):
@@ -289,44 +189,8 @@ class Segment:
         return self._status
 
     @status.setter
-    def status(self, value):  # NOTE(Jeff): Default changed from None to UNSET.
-        self._status = Segment.Status(value) if value else Segment.Status.UNSET
-
-    @property
-    def walltime(self):
-        return self._walltime
-
-    @walltime.setter
-    def walltime(self, value):
-        if value is None:
-            value = 0.0
-        else:
-            value = float(value)
-            if value < 0:
-                raise ValueError("'walltime' must be nonnegative")
-        self._walltime = value
-
-    @property
-    def cputime(self):
-        return self._cputime
-
-    @cputime.setter
-    def cputime(self, value):
-        if value is None:
-            value = 0.0
-        else:
-            value = float(value)
-            if value < 0:
-                raise ValueError("'cputime' must be nonnegative")
-        self._cputime = value
-
-    @property
-    def data(self):
-        return self._data
-
-    @data.setter
-    def data(self, value):
-        self._data = _AuxiliaryData(value or {})
+    def status(self, value):
+        self._status = Segment.Status(value) if value is not None else None
 
     @property
     def initial_state(self):
@@ -358,13 +222,6 @@ class Segment:
             hex(id(self)),
         )
 
-    @property
-    def initial_state_id(self):  # deprecated: always returns -1
-        if self.parent_id < 0:
-            return -(self.parent_id + 1)
-        else:
-            return None
-
     def __replace__(self, /, **changes):  # support copy.replace() in Python >=3.13.
         parameters = inspect.signature(self.__init__).parameters
         kwargs = {name: getattr(self, name) for name in parameters}
@@ -386,3 +243,7 @@ class Segment:
 
         """
         return self.__replace__(**changes)
+
+    @classmethod
+    def from_core(cls, segment):
+        return cls(**vars(segment))

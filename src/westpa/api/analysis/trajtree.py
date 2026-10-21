@@ -10,7 +10,7 @@ import numpy as np
 import pygraphviz as pgv
 from matplotlib.ticker import MaxNLocator
 
-from westpa.api._data_manager import DataManager  # noqa
+from .._data_manager import DataManager
 
 
 class SegmentPointer(NamedTuple):
