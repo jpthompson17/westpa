@@ -11,7 +11,7 @@ picklable; and (2) even if they were, do we want to be storing pickles?
 The 'ibstates' group was removed to maintain symmetry with 'tstates'.
 
 Version history:
-    Version 11beta1
+    Version 11-beta1
         - Added 'initial_states' and 'final_states' datasets.
         - Removed 'bin_topologies' group.
         - Removed 'ibstates' and 'tstates' groups.
@@ -40,7 +40,8 @@ from .segment import Segment
 
 logger = logging.getLogger(__name__)
 
-file_format_version = '11beta1'
+file_format_version = 11
+file_format_prerelease = 'beta1'
 
 
 def state_to_numpy(state):
@@ -69,6 +70,7 @@ class DataManager(WESTDataManager):
         super().prepare_backing()
         with self.flushing_lock():
             self.we_h5file['/'].attrs['west_file_format_version'] = file_format_version
+            self.we_h5file['/'].attrs['west_file_format_prerelease'] = file_format_prerelease
 
     def prepare_iteration(self, n_iter, segments):
         logger.debug('preparing HDF5 group for iteration %d (%d segments)' % (n_iter, len(segments)))
